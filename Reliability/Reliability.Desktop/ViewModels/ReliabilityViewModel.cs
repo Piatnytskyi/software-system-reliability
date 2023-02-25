@@ -1,10 +1,10 @@
-﻿using Reliability.Desktop.Commands;
-using System.Threading.Tasks;
-using System;
+﻿using MathNet.Numerics.LinearAlgebra;
+using OxyPlot;
+using OxyPlot.Series;
 using Reliability.Core;
-using MathNet.Numerics.LinearAlgebra;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
+using Reliability.Desktop.Commands;
+using System;
+using System.Threading.Tasks;
 
 namespace Reliability.Desktop.ViewModels
 {
@@ -122,22 +122,6 @@ namespace Reliability.Desktop.ViewModels
             }
         }
 
-        private ObservableCollection<KeyValuePair<int, double>> _chartData;
-
-        public ObservableCollection<KeyValuePair<int, double>> ChartData
-        {
-            get => _chartData;
-            set
-            {
-                if (_chartData.Equals(value))
-                {
-                    return;
-                }
-                _chartData = value;
-                RaisePropertyChanged(nameof(ChartData));
-            }
-        }
-
         private string _status = string.Empty;
 
         public string Status
@@ -219,7 +203,7 @@ namespace Reliability.Desktop.ViewModels
                 for (int index = 0; index < 24; ++index)
                 {
                     Output += "P[" + (index + 1) + "] = " + denialApproximations[index].ToString() + "\r\n";
-                    ChartData.Add(new KeyValuePair<int, double>(index + 1, denialApproximations[index]));
+                    //ChartData.Add(new KeyValuePair<string, double>("P[" + (index + 1) + "]", denialApproximations[index]));
                 }
 
                 double denialApproximationsProbabilitySum = denialApproximations.Sum();
