@@ -90,6 +90,86 @@ namespace Reliability.Desktop.ViewModels
             }
         }
 
+        private double _eta1 = 5 * Math.Pow(10, -4);
+
+        public double Eta1
+        {
+            get => _eta1;
+            set
+            {
+                if (_eta1.Equals(value))
+                {
+                    return;
+                }
+                _eta1 = value;
+                RaisePropertyChanged(nameof(Eta1));
+            }
+        }
+
+        private double _eta2 = 4 * Math.Pow(10, -4);
+
+        public double Eta2
+        {
+            get => _eta2;
+            set
+            {
+                if (_eta2.Equals(value))
+                {
+                    return;
+                }
+                _eta2 = value;
+                RaisePropertyChanged(nameof(Eta2));
+            }
+        }
+
+        private double _eta3 = 3 * Math.Pow(10, -4);
+
+        public double Eta3
+        {
+            get => _eta3;
+            set
+            {
+                if (_eta3.Equals(value))
+                {
+                    return;
+                }
+                _eta3 = value;
+                RaisePropertyChanged(nameof(Eta3));
+            }
+        }
+
+        private double _eta4 = 2.5 * Math.Pow(10, -4);
+
+        public double Eta4
+        {
+            get => _eta4;
+            set
+            {
+                if (_eta4.Equals(value))
+                {
+                    return;
+                }
+                _eta4 = value;
+                RaisePropertyChanged(nameof(Eta4));
+            }
+        }
+
+        private double _eta5 = 5 * Math.Pow(10, -4);
+
+        public double Eta5
+        {
+            get => _eta5;
+            set
+            {
+                if (_eta5.Equals(value))
+                {
+                    return;
+                }
+                _eta5 = value;
+                RaisePropertyChanged(nameof(Eta5));
+            }
+        }
+
         private int _integrationLimitsStart = 0;
 
         public int IntegrationLimitsStart
@@ -186,19 +266,21 @@ namespace Reliability.Desktop.ViewModels
             }
         }
 
-        public AsyncCommand ApproximateDenialCommand { get; set; }
+        public AsyncCommand ApproximateDenial2Command { get; set; }
+        public AsyncCommand ApproximateDenial7Command { get; set; }
 
         public ReliabilityViewModel()
         {
-            ApproximateDenialCommand = new AsyncCommand(o => ApproximateDenial(), c => CanApproximateDenial());
+            ApproximateDenial2Command = new AsyncCommand(o => ApproximateDenial2(), c => CanApproximateDenial2());
+            ApproximateDenial7Command = new AsyncCommand(o => ApproximateDenial7(), c => CanApproximateDenial7());
         }
 
-        private bool CanApproximateDenial()
+        private bool CanApproximateDenial2()
         {
             return !IsInProgress;
         }
 
-        private async Task ApproximateDenial()
+        private async Task ApproximateDenial2()
         {
             IsInProgress = true;
             Status = "Approximating Denials...:";
@@ -232,6 +314,65 @@ namespace Reliability.Desktop.ViewModels
                     + denialApproximations[8]
                     + denialApproximations[10]
                     + denialApproximations[13];
+                double failureProbability = denialApproximationsProbabilitySum - successProbability;
+                Output += "Success Probability: " + successProbability + "\r\n";
+                Output += "FailureProbability: " + failureProbability + "\r\n";
+                Output += "Denial approximations probability sum: " + denialApproximationsProbabilitySum + "\r\n";
+
+                Status = "Denial was approximated!";
+                IsInProgress = false;
+            });
+        }
+
+        private bool CanApproximateDenial7()
+        {
+            return !IsInProgress;
+        }
+
+        private async Task ApproximateDenial7()
+        {
+            IsInProgress = true;
+            Status = "Approximating Denials...:";
+
+            await Task.Run(() =>
+            {
+                var softwareHardwareSystem7 = new SoftwareHardwareSystem7();
+                Vector<double> denialApproximations = softwareHardwareSystem7.GetDenialApproximations(
+                    IntegrationLimitsStart,
+                    IntegrationLimitsEnd,
+                    Lambda1,
+                    Lambda2,
+                    Lambda3,
+                    Lambda4,
+                    Lambda5,
+                    Eta1,
+                    Eta2,
+                    Eta3,
+                    Eta4,
+                    Eta5);
+
+                Output = string.Empty;
+                for (int index = 0; index < 37; ++index)
+                {
+                    Output += "P[" + (index + 1) + "] = " + denialApproximations[index].ToString() + "\r\n";
+                    ChartData.Add(new KeyValuePair<int, double>(index + 1, denialApproximations[index]));
+                }
+
+                double denialApproximationsProbabilitySum = denialApproximations.Sum();
+                double successProbability = denialApproximations[0]
+                    + denialApproximations[1]
+                    + denialApproximations[2]
+                    + denialApproximations[3]
+                    + denialApproximations[6]
+                    + denialApproximations[7]
+                    + denialApproximations[10]
+                    + denialApproximations[22]
+                    + denialApproximations[23]
+                    + denialApproximations[24]
+                    + denialApproximations[25]
+                    + denialApproximations[27]
+                    + denialApproximations[28]
+                    + denialApproximations[30];
                 double failureProbability = denialApproximationsProbabilitySum - successProbability;
                 Output += "Success Probability: " + successProbability + "\r\n";
                 Output += "FailureProbability: " + failureProbability + "\r\n";
