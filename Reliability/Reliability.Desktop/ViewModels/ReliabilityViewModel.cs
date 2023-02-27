@@ -154,22 +154,6 @@ namespace Reliability.Desktop.ViewModels
             }
         }
 
-        private double _eta5 = 5 * Math.Pow(10, -4);
-
-        public double Eta5
-        {
-            get => _eta5;
-            set
-            {
-                if (_eta5.Equals(value))
-                {
-                    return;
-                }
-                _eta5 = value;
-                RaisePropertyChanged(nameof(Eta5));
-            }
-        }
-
         private int _integrationLimitsStart = 0;
 
         public int IntegrationLimitsStart
@@ -301,7 +285,7 @@ namespace Reliability.Desktop.ViewModels
                 for (int index = 0; index < 24; ++index)
                 {
                     Output += "P[" + (index + 1) + "] = " + denialApproximations[index].ToString() + "\r\n";
-                    ChartData.Add(new KeyValuePair<int, double>(index + 1, denialApproximations[index]));
+                    //ChartData.Add(new KeyValuePair<int, double>(index + 1, denialApproximations[index]));
                 }
 
                 double denialApproximationsProbabilitySum = denialApproximations.Sum();
@@ -344,18 +328,16 @@ namespace Reliability.Desktop.ViewModels
                     Lambda2,
                     Lambda3,
                     Lambda4,
-                    Lambda5,
                     Eta1,
                     Eta2,
                     Eta3,
-                    Eta4,
-                    Eta5);
+                    Eta4);
 
                 Output = string.Empty;
                 for (int index = 0; index < 37; ++index)
                 {
                     Output += "P[" + (index + 1) + "] = " + denialApproximations[index].ToString() + "\r\n";
-                    ChartData.Add(new KeyValuePair<int, double>(index + 1, denialApproximations[index]));
+                    //ChartData.Add(new KeyValuePair<int, double>(index + 1, denialApproximations[index]));
                 }
 
                 double denialApproximationsProbabilitySum = denialApproximations.Sum();
